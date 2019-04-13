@@ -63,7 +63,6 @@ function doSolve(table) {
     let first = firstEmpty(table);
     if (first !== NONE_EMPTY) {
         let possibilities = validPossibilities(table, ...first);
-        console.log(possibilities);
         if (possibilities.length === 0) {
             return NO_SOLUTION;
         }
@@ -151,7 +150,25 @@ function setTable(table) {
     }
 }
 
+function validChars(table) {
+    let chars = ["", "1", "2", "3", "4", "5", "6", "7", "8", "9"];
+    for (let row of table) {
+        for (let item of row) {
+            if (!chars.includes(item)) {
+                return false;
+            }
+        }
+    }
+    return true;
+}
+
+function clearError() {
+    let error = document.getElementById("error");
+    error.innerHTML = "";
+}
+
 function showError(message) {
+    clearError();
     let error = document.getElementById("error");
     let newalert = document.createElement("div");
     newalert.setAttribute("class", "alert alert-primary");
@@ -168,23 +185,40 @@ function showError(message) {
     error.appendChild(newalert);
 }
 
-function clearError() {
-    let error = document.getElementById("error");
-    error.innerHTML = "";
+function clearStatus() {
+    let status = document.getElementById("status");
+    status.innerHTML = "";
+}
+
+function setStatus(message) {
+    clearStatus();
+    let status = document.getElementById("status");
+    let newalert = document.createElement("div");
+    newalert.setAttribute("class", "alert alert-primary");
+    newalert.setAttribute("role", "alert");
+    newalert.innerHTML = message;
+    status.appendChild(newalert);
 }
 
 function solve() {
     let table = getTable();
-    if (!validTable(table)) {
-        showError("Invalid puzzle");
+    if (!validChars(table)) {
+        showError("Invalid character");
     } else {
-        let solution = getSolution(table);
-        // console.log(solution);
-        if (solution === NO_SOLUTION) {
-            showError("No solution found");
+        if (!validTable(table)) {
+            showError("Invalid puzzle");
         } else {
-            clearError();
-            setTable(solution);
+            let start = Date.now();
+            let solution = getSolution(table);
+            let end = Date.now();
+            let totaltime = (end - start) / 1000;
+            if (solution === NO_SOLUTION) {
+                showError("No solution found");
+            } else {
+                clearError();
+                setTable(solution);
+                setStatus(`Solution found in ${totaltime} seconds`);
+            }
         }
     }
 }
@@ -214,7 +248,8 @@ function main() {
         }
     }
 
-    let puzzle = ".27.5.....1....6...9.82....8..7.....5.......4.....2..9....85.6...3....1.....7.98.";
+    // let puzzle = ".27.5.....1....6...9.82....8..7.....5.......4.....2..9....85.6...3....1.....7.98.";
+    let puzzle = "8..........36......7..9.2...5...7.......457.....1...3...1....68..85...1..9....4..";
     puzzle = puzzle.split("");
     while (puzzle.indexOf(".") !== -1){
         let index = puzzle.indexOf(".");

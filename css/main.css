@@ -9,7 +9,6 @@ main {
     color: black;
     background-color: white;
     width: 500px;
-    /*height: 500px;*/
     margin: auto;
     padding-top: 20px;
 }
@@ -50,7 +49,5 @@ main {
 }
 
 .solve-button {
-    margin-top: 20px;
+    margin: 20px 0px;
 }
-
-/* TRY MAKING THE BOXES SQUARE ONCE MORE, THIS TIME STARTING FROM THE INNER-MOST ELEMENT AND WORKING OUTWARD */
